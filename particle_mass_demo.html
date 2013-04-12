@@ -1,0 +1,53 @@
+<!-- <!DOCTYPE html> -->
+<html>
+<head>
+<title>Particle Demo</title>
+</head>
+<body>
+<canvas id = "canvas1" height = "500" width = "500">You don’t have canvas guy</canvas>
+<script type="text/javascript">
+	var canvas1 = document.getElementById("canvas1");
+	var context1 = canvas1.getContext('2d');
+	var totalFlakes = new Array(100);
+	var refresh = 0;
+
+	function drawScreen(){
+		context1.fillStyle = '#000000';
+		context1.fillRect(0,0,canvas1.width,canvas1.height);
+
+		for(x=0;x<100;x++){
+			totalFlakes[x].drawFlake();
+			totalFlakes[x].updateFlake();
+		}
+	}
+	function snowFlake(positionX,positionY) {
+		this.positionX = positionX;
+		this.positionY = positionY;
+		this.velX = 0;
+		this.velY = 0;
+		this.accX = 0;
+		this.accY = .56;
+		this.mass = Math.random();
+		this.inverseMass = 1 / this.mass;
+	}
+	snowFlake.prototype.drawFlake = function() {
+		context1.fillStyle = '#fff';
+		context1.fillRect(this.positionX,this.positionY,2,2);
+	};
+	snowFlake.prototype.updateFlake = function() {
+		this.velX += this.accX;
+		this.velY += this.accY;
+		this.positionX += this.velX * this.inverseMass;
+		this.positionY += this.velY * this.inverseMass;
+		if(this.positionY > canvas1.height){
+			this.positionY = Math.floor(Math.random()*10);
+			this.velY = 0;
+		}
+	};
+	for(x = 0;x<100; x++){
+		totalFlakes[x] = new snowFlake(Math.floor(Math.random()*501),Math.floor(Math.random()*10));
+	}
+	setInterval(drawScreen, 33);
+</script>
+</body>
+</html>
